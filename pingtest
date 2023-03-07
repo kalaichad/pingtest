@@ -1,0 +1,31 @@
+#!/usr/bin/bash
+clear
+echo
+echo -e "                                          \033[34m LIC Vellore Divisional Office  $(date "+%a %d-%m-%Y %r") \033[0;39m "
+echo
+echo -e "                                                     \033[35m  The Script writen by KALAISELVAN \033[0;39m"
+echo
+if [ ! -s ./ping.conf ]
+then
+	echo "ping.conf file not avilable!!"
+	echo
+	exit 1
+fi
+echo
+IFS=$'\n'
+for i in $(cat ping.conf)
+do
+	mname=$(echo ${i} | awk '{ print $1 }')
+	ipaddr=$(echo ${i} | awk '{ print $2 }')
+	ping -w1 -c2 -i 0.1 ${ipaddr} > /dev/null 2>&1
+        if [ $? -eq 0 ]
+	then
+		echo -e "\033[32m [UP] \033[0;39m      ${mname} ip address is  pinging ${ipaddr}"
+	else
+		echo -e "\033[31m [DOWN] \033[0;39m \033[31m   ${mname} ip address not pinging ${ipaddr} ERROR!!!!.. \033[0;39m"
+	fi
+
+done
+echo 
+echo
+
